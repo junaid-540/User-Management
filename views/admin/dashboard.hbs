@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/dashboard.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <title>Dashboard</title>
+</head>
+<body>
+
+<div id="adminDashboard" class="page active">
+  <div class="admin-header">
+    <h1>Admin Dashboard</h1>
+    <div>
+      <span class="user-count">Total Users: {{users.length}}</span>
+      <form action="/admin/logout" method="post" style="display: inline-block">
+        <button class="btn btn-secondary" type="submit">Logout</button>
+      </form>
+    </div>
+  </div>
+{{!-- {{#if dashmsg}}
+  <div class="alert {{type}}">
+    {{dashmsg}}
+  </div>
+{{/if}} --}}
+
+  <!-- Add New User Form -->
+  <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+    <h2>Add New User</h2>
+    <form action="/admin/add" method="post" class="row g-3" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: end;">
+      <div class="form-group">
+        <label for="addUserName">Name:</label>
+        <input type="text" name="username" id="addUserName" required>
+      </div>
+      <div class="form-group">
+        <label for="addUserEmail">Email:</label>
+        <input type="email" name="email" id="addUserEmail" required>
+      </div>
+      <div class="form-group">
+        <label for="addUserPassword">Password:</label>
+        <input type="password" name="password" id="addUserPassword" required>
+      </div>
+      <button type="submit" class="btn btn-success">Add User</button>
+    </form>
+  </div>
+
+  <!-- Search Bar -->
+  <form class="search-bar" action="/admin/search" method="post">
+    <input type="text" name="search" id="searchInput" placeholder="Search users by name or email...">
+    <button class="btn" type="submit">Search</button>
+    <a href="/admin/dashboard" class="btn btn-secondary">Clear</a>
+  </form>
+
+  <!-- Users Table -->
+  <table class="user-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Registration Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each users}}
+      <tr>
+        <td>{{inc @index}}</td>
+        <td>{{this.username}}</td>
+        <td>{{this.email}}</td>
+        <td>{{this.registrationDate}}</td>
+        <td>
+          <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{this._id}}">Edit</button>
+          <button class="btn btn-danger btn-sm delete-btn" data-id="{{this._id}}">Delete</button>
+        </td>
+      </tr>
+
+      <!-- Edit Modal -->
+      <div class="modal fade" id="editModal{{this._id}}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form action="/admin/edit/{{this._id}}" method="post">
+              <div class="modal-header">
+                <h5 class="modal-title">Edit User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <input type="text" name="username" value="{{this.username}}" class="form-control mb-2" required>
+                <input type="email" name="email" value="{{this.email}}" class="form-control mb-2" required>
+                <input type="password" name="password" placeholder="New password" class="form-control">
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<!-- DELETE + VALIDATION SCRIPT -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".delete-btn").forEach(button => {
+      button.addEventListener("click", async () => {
+        const userId = button.getAttribute("data-id");
+
+        const result = await Swal.fire({
+          title: "Are you sure?",
+          text: "This user will be deleted permanently!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#3085d6",
+          confirmButtonText: "Yes, delete it!"
+        });
+
+        if (result.isConfirmed) {
+          try {
+            const response = await fetch(`/admin/delete/${userId}`, { method: "DELETE" });
+            const data = await response.json();
+
+            if (data.success) {
+              Swal.fire("Deleted!", "User has been deleted.", "success");
+              button.closest("tr").remove();
+            } else {
+              Swal.fire("Error!", data.message || "Delete failed.", "error");
+            }
+          } catch (err) {
+            console.error(err);
+            Swal.fire("Error!", "Something went wrong.", "error");
+          }
+        }
+      });
+    });
+
+    // Add Form Validation
+    const form = document.querySelector('form[action="/admin/add"]');
+    form.addEventListener("submit", function (e) {
+      const username = form.querySelector('input[name="username"]').value.trim();
+      const email = form.querySelector('input[name="email"]').value.trim();
+      const password = form.querySelector('input[name="password"]').value.trim();
+
+      if (!username || !email || !password) {
+        e.preventDefault();
+        Swal.fire("Missing Fields", "All fields are required.", "warning");
+        return;
+      }
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        e.preventDefault();
+        Swal.fire("Invalid Email", "Please enter a valid email address.", "error");
+        return;
+      }
+    });
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Show SweetAlert for server-side messages
+    {{#if dashmsg}}
+      Swal.fire({
+        icon: '{{type}}', // 'success', 'error', 'warning', etc.
+        title: '{{dashmsg}}',
+        timer: 2500,
+        showConfirmButton: false
+      });
+    {{/if}}
+  });
+</script>
+</body>
+</html>

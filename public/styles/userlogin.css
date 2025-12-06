@@ -1,0 +1,108 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+    line-height: 1.5;
+    min-height: 100vh;
+    background: linear-gradient(to right, rgb(16, 144, 187), rgb(50, 46, 47));
+    flex-direction: column;
+    margin: 0;
+}
+
+.main {
+    background-color: transparent;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    transition: transform 0.2s;
+    width: 350px;
+    text-align: center;
+    
+}
+
+h1 {
+    color: #ffffff;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+
+
+input {
+    display: block;
+    width: 100%;
+    margin-bottom: 1.6rem;
+    padding: 0.7rem;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    outline: none;
+    font-size: 0.8rem;
+}
+
+button {
+    padding: 1rem;
+    /* margin-top: 1rem; */
+    margin-bottom: 1rem;
+    border: none;
+    color: white;
+    cursor: pointer;
+    background-color: #2b4467;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0 1rem 0;
+}
+
+h3{
+    color: red;
+    font-size: 1.5rem !important;
+}
+
+h4{
+    color: red;
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+    display: none;
+    margin-bottom: 2px;
+}
+
+p a{
+    color: #ddd;
+    text-decoration: none;
+}
+
+p a:hover{
+    text-decoration: underline;
+    color: white;
+}
+#admin{
+    width: 40px;
+    height: 40px;
+    background: rgba(102, 126, 234, 0.1);
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+#admin:hover {
+    background: rgba(102, 126, 234, 0.2);
+    border-color: rgba(102, 126, 234, 0.4);
+    transform: scale(1.5);
+}

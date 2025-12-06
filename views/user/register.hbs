@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Register Form</title>
+    <link rel="stylesheet" href="/styles/userregister.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+
+<body>
+    <div class="main">
+        
+        <h1>CREATE AN ACCOUNT</h1>
+        {{!-- <h3 > {{msg}} </h3> --}}
+        <form action="/user/register" method="post" id="registerForm">
+
+            <input type="text" name="username" id="username" placeholder="Username">
+            <span class="error" id="name-error" aria-live="polite" ></span>
+            
+            <input type="text" id="email" name="email" placeholder="Your Email">
+            <span class="error" id="email-error" aria-live="polite"></span>
+
+            <input type="password" id="password" name="password" placeholder="New Password">
+            <span class="error" id="password-error" aria-live="polite"></span>
+            
+            <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password">
+            <span class="error" id="confirmPassword-error" aria-live="polite"></span>
+
+
+                {{!-- <a href="/user/login">alredy have an account</a> --}}
+
+            <div class="wrap">
+                <button type="submit"> Register </button>
+            </div>
+        </form>
+
+        <p>already have an account.  <a href="/user/login"> sign in</a></p>
+    </div>
+
+<script>
+    const form = document.getElementById("registerForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const emailError = document.getElementById("email-error");
+    const passwordError = document.getElementById("password-error");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+    const confirmPasswordError = document.getElementById("confirmPassword-error");
+    const usernameInput = document.getElementById('username');
+    const usernameError = document.getElementById('name-error');
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        // Email validation regex:
+        // /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+        // ^           → Start of the string
+        // [^\s@]+     → Match one or more characters that are NOT whitespace (\s) or @
+        //               This ensures the email doesn't start with a space or contain multiple @
+        // @           → Requires exactly one "@" symbol
+        // [^\s@]+     → After the @, match one or more characters that are not whitespace or another @
+        // \.          → Match a literal dot (.) — separates domain and top-level domain
+        // [^\s@]+     → Match one or more characters after the dot (e.g., com, net)
+        // $           → End of the string
+
+
+    form.addEventListener("submit", function (e) {
+        let isValid = true;
+
+        
+        //trim inputs
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+        const confirm = confirmPasswordInput.value.trim();
+        const name = usernameInput.value.trim();
+
+
+        const regex = /^[a-zA-Z0-9]+$/;
+
+        // Hide errors first
+        emailError.style.display = "none";
+        passwordError.style.display = "none";
+        confirmPasswordError.style.display = "none";
+        usernameError.style.display = "none";
+
+        // Validate email
+        if (email === "") {
+            emailError.textContent = "Email is required.";
+            emailError.style.display = "block";
+            isValid = false;
+        }else if(!emailRegex.test(email)){
+            emailError.textContent = "Enter a valid email address.";
+            emailError.style.display = "block";
+            isValid = false;
+        }
+
+        // Validate password
+        if (password === "") {
+            passwordError.textContent = "Password is required.";
+            passwordError.style.display = "block";
+            isValid = false;
+        }else if(password.length < 4){
+            passwordError.textContent = "Password must be at least 4 characters.";
+            passwordError.style.display = "block";
+            isValid = false;
+        }else if(!regex.test(password)){
+            passwordError.textContent = "Password must not contain symbols";
+            passwordError.style.display = "block";
+            isValid = false;
+        }
+
+        //Validate confirmPassword
+        if(confirm === ""){
+            confirmPasswordError.textContent = "Please confirm your password.";
+            confirmPasswordError.style.display = "block";
+            isValid = false;
+        }else if(password !== confirm){
+            confirmPasswordError.textContent = "Passwords do not match.";
+            confirmPasswordError.style.display = "block";
+            isValid = false;
+        }
+
+
+        if(name === ""){
+            usernameError.textContent = "Enter your Username";
+            usernameError.style.display = "block";
+            isValid = false;
+        }else if(/\d/.test(name)){
+            usernameError.textContent = "Number Not Allowed.";
+            usernameError.style.display = 'block';
+            isValid = false;
+        }
+
+        //stop form is not valid
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+
+
+    //Real time error cleaning :
+    // as soon as the user tyes in this fields, it hide the error message automatically
+    emailInput.addEventListener("input",()=>{
+        emailError.style.display = "none";
+    });
+
+    passwordInput.addEventListener("input",()=>{
+        passwordError.style.display = "none";
+    });
+
+    confirmPasswordInput.addEventListener("input",()=>{
+        confirmPasswordError.style.display = "none";
+    });
+
+    usernameInput.addEventListener("input",()=>{
+        usernameError.style.display = "none";
+    })
+
+
+   // const h3 = document.querySelector('h3');
+
+      const msg = "{{msg}}";
+  const type = "{{type}}";
+
+  if (msg && msg.trim() !== "") {
+    Swal.fire({
+      icon: type || 'info',
+      title: msg,
+      timer: 2000,
+      showConfirmButton: false
+    });
+
+    // Optional redirect to login if user created
+    if (type === "success") {
+      setTimeout(() => {
+        window.location.href = "/user/login";
+      }, 2000);
+    }
+  
+        // Optional: hide the h3 element after showing the popup
+        h3.style.display = "none";
+    }
+</script>
+
+
+</body>
+
+</html>

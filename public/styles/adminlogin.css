@@ -1,0 +1,142 @@
+/* Reset box sizing */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Body and page background */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, #e0eafc, #cfdef3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Admin Login Container */
+#adminLogin.page {
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+/* Title Styling */
+#adminLogin h1 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    font-weight: bold;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Form Structure */
+#adminLoginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Label and Input Styles */
+#adminLoginForm .form-group {
+    text-align: left;
+}
+
+#adminLoginForm label {
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 8px;
+    display: block;
+}
+
+#adminLoginForm input[type="text"],
+#adminLoginForm input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.3s;
+}
+
+#adminLoginForm input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+/* Button Style */
+#adminLoginForm .btn {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#adminLoginForm .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Error Message Box */
+#error-message,
+#adminLoginError.error-message {
+    display: none;
+    background: #f8d7da;
+    color: #dc3545;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Back Link Button */
+.link-btn {
+    background: none;
+    border: none;
+    color: #667eea;
+    text-decoration: underline;
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    margin-bottom: 1rem !important;
+    
+}
+
+.link-btn:hover {
+    color: #764ba2;
+}
+p a{
+    text-decoration: none;
+}
+
+p a:hover{
+    text-decoration: underline;
+}
+.back-link {
+    margin-top: 1rem; /* add space from form */
+    font-size: 1rem;
+    text-align: center;
+}
+
+#err{
+    color: red;
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+    display: none;
+    margin-bottom: 2px;
+}
+

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login Form</title>
+    <link rel="stylesheet" href="/styles/userlogin.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+
+<body>
+    <div class="main">
+        
+            <a href="/admin/login" id="admin">👤 </a>
+        
+        <h1>SIGN IN</h1>
+        <h3> {{msg}} </h3>
+        <h4> {{loginmsg}} </h4>
+        <form action="/user/login" method="post" id="loginForm">
+            
+            <input type="text" id="email" name="email" placeholder="Email">
+            <span class="error" id="email-error" aria-live="polite"></span>
+
+            <input type="password" id="password" name="password" placeholder="Enter your Password">
+            <span class="error" id="password-error" aria-live="polite"></span>
+
+                  
+            <div class="wrap">
+                <button type="submit">Login</button>
+            </div>
+        </form>
+
+         <p>Not registered?<a href="/user/register">Sign up</a></p>
+    </div>
+
+<script>
+    const form = document.getElementById("loginForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const emailError = document.getElementById("email-error");
+    const passwordError = document.getElementById("password-error");
+
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        // Email validation regex:
+        // /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+        // ^           → Start of the string
+        // [^\s@]+     → Match one or more characters that are NOT whitespace (\s) or @
+        //               This ensures the email doesn't start with a space or contain multiple @
+        // @           → Requires exactly one "@" symbol
+        // [^\s@]+     → After the @, match one or more characters that are not whitespace or another @
+        // \.          → Match a literal dot (.) — separates domain and top-level domain
+        // [^\s@]+     → Match one or more characters after the dot (e.g., com, net)
+        // $           → End of the string
+
+
+    form.addEventListener("submit", function (e) {
+        let isValid = true;
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        // Hide errors first
+        emailError.style.display = "none";
+        passwordError.style.display = "none";
+
+        // Validate email
+        if (email === "") {
+            emailError.textContent = "Email is required.";
+            emailError.style.display = "block";
+            isValid = false;
+        }else if(!emailRegex.test(email)){
+            emailError.textContent = "Enter a vaild email address.";
+            emailError.style.display = "block";
+            isValid = false;
+        }
+
+        // Validate password
+        if (password === "") {
+            passwordError.textContent = "Password is required.";
+            passwordError.style.display = "block";
+            isValid = false;
+        }else if(password.length < 4){
+            passwordError.textContent = "Password must be at least 4 characters.";
+            passwordError.style.display = "block";
+            isValid = false;
+        }
+
+
+        //stop form is not valid
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+
+
+    //Real time error cleaning :
+    // as soon as the user tyes in this fields, it hide the error message automatically
+    emailInput.addEventListener("input",()=>{
+        emailError.style.display = "none";
+    });
+
+    passwordInput.addEventListener("input",()=>{
+        passwordError.style.display = "none";
+    });
+
+
+
+
+
+     const msg = "{{loginmsg}}";
+  const type = "{{type}}"; // e.g. 'success', 'error', 'info'
+
+  if (msg && msg.trim() !== "") {
+    Swal.fire({
+      icon: type || "info",
+      title: msg,
+      timer: 2000,
+      showConfirmButton: false
+    });
+
+        // Optional: hide the h3 element after showing the popup
+        h3.style.display = "none";
+    }
+
+</script>
+
+
+
+</body>
+
+</html>
